@@ -20,7 +20,7 @@ jobs:
       - name: Maven Verify
         run: mvn -B clean install --settings=settings.xml
       - name: Maven Sonar Code Coverage
-        run: mvn sonar:sonar --settings=settings.xml -Dsonar.projectKey=dexter -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        run: mvn sonar:sonar --settings=settings.xml -Dsonar.projectKey=modulworkshop -Dsonar.login=${{ secrets.SONAR_TOKEN }}
       - name: Maven Package
         run: mvn -B clean package spring-boot:repackage --settings=settings.xml -DskipTests
       - name: Login to DockerHub
