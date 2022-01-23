@@ -1,0 +1,37 @@
+name: My Workflow
+on:
+  create:
+    tags:
+      - '*SNAPSHOT'
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set Output
+        id: vars
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+      - name: Set Up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+          distribution: 'adopt'
+      - name: Maven Verify
+        run: mvn -B clean install --settings=settings.xml
+      - name: Maven Sonar Code Coverage
+        run: mvn sonar:sonar --settings=settings.xml -Dsonar.projectKey=dexter -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+      - name: Maven Package
+        run: mvn -B clean package spring-boot:repackage --settings=settings.xml -DskipTests
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build Image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: piinalpin/springboot-crud:latest, piinalpin/springboot-crud:${{ steps.vars.outputs.tag }}
+          build-args: APP_VERSION=${{ steps.vars.outputs.tag }}

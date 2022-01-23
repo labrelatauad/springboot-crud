@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.1.0 http://maven.apache.org/xsd/settings-1.1.0.xsd"
+          xmlns="http://maven.apache.org/SETTINGS/1.1.0">
+    <pluginGroups>
+        <pluginGroup>org.sonarsource.scanner.maven</pluginGroup>
+    </pluginGroups>
+    <profiles>
+        <profile>
+            <id>sonar</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <sonar.organization>labrelatauad</sonar.organization>
+                <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+                <sonar.coverage.exclusions>
+                    **/config/*.java, **/config/**/*.java,
+                    **/entity/*.java, **/entity/**/*.java,
+                    **/constant/*.java, **/constant/**/*.java,
+                    **/exception/*.java, **/exception/**/*.java,
+                    **/form/*.java, **/form/**/*.java,
+                    **/repository/*.java, **/repository/**/*.java,
+                    **/modulworkshop/ModulworkshopApplication.java
+                </sonar.coverage.exclusions>
+                <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+                <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+                <sonar.language>java</sonar.language>
+                <sonar.java.libraries>${user.home}/.m2/repository</sonar.java.libraries>
+                <sonar.sources>src/main/java</sonar.sources>
+                <sonar.java.source>11</sonar.java.source>
+                <sonar.binaries>target/classes</sonar.binaries>
+            </properties>
+        </profile>
+    </profiles>
+</settings>
